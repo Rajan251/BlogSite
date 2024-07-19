@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   web:
-    build: .
-    command: gunicorn --bind 0.0.0.0:8875 blogsite.wsgi:application
+    build: .  #this line is used to build docker images from Dockerfile located in the current dir when we run docker-compose up it will look for Dockerfile specified in the dir
+    command: gunicorn --bind 0.0.0.0:8875 blogsite.wsgi:application  # this will execute the run the application inside the container.
     volumes:
       - .:/app
     ports:
