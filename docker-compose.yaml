@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn --bind 0.0.0.0:8875 blogsite.wsgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "8875:8875"
+    environment:
+      - DEBUG=1
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
