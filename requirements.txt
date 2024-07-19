@@ -1,1 +1,7 @@
 Pillow
+Django>=3.2,<4.0
+djangorestframework>=3.12.4
+django-crispy-forms>=1.11.2
+psycopg2>=2.8.6
+gunicorn>=20.1.0
+whitenoise>=5.2.0
