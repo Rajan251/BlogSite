@@ -9,11 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # env:
-    #   IMAGE_TAG: ${{ github.run_number }}
-    #   DOCKER_REGISTRY: your-docker-registry
-    #   DOCKER_IMAGE: ${{ env.DOCKER_REGISTRY }}/your-app:${{ env.IMAGE_TAG }}
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -25,6 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        sudo apt install python3-pip
         python3 -m venv env
         . env/bin/activate
         pip install -r requirements.txt
@@ -36,22 +32,10 @@ jobs:
         python manage.py makemigrations
         python manage.py test
 
-    - name: Build Docker image
-      run: docker build -t ${{ env.DOCKER_IMAGE }} .
-
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Push Docker image
-      run: docker push ${{ env.DOCKER_IMAGE }}
-
-    - name: Deploy to server
-      env:
-        SSH_KEY: ${{ secrets.SSH_KEY }}
-      run: |
-        echo "${{ env.SSH_KEY }}" > key.pem
-        chmod 600 key.pem
-        ssh -i key.pem -o StrictHostKeyChecking=no user@your-server "docker pull ${{ env.DOCKER_IMAGE }} && docker run -d -p 8000:8000 ${{ env.DOCKER_IMAGE }}"
+    # - name: Deploy to server
+    #   env:
+    #     SSH_KEY: ${{ secrets.SSH_KEY }}
+    #   run: |
+    #     echo "${{ env.SSH_KEY }}" > key.pem
+    #     chmod 600 key.pem
+    #     scp -i key.pem -o StrictHostKeyChecking=no -r *
